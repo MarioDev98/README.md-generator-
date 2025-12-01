@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Generador archivo README.md</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f5f5f5;
+        padding: 30px;
+        max-width: 900px;
+        margin: auto;
+        transition: 0.3s;
+        color: #222;
+    }
+
+    
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* CONTENEDOR DE OPCIONES */
+    #toolbar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .tool-box {
+        background: #fff;
+        border-radius: 10px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: center;
+        transition: 0.2s;
+    }
+
+    .tool-box:hover {
+        border-color: #000;
+    }
+
+    .tool-title {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    .tool-btn {
+        padding: 8px 10px;
+        width: 100%;
+        border-radius: 6px;
+        border: none;
+        background: #111;
+        color: white;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .tool-btn:hover {
+        background: #333;
+    }
+
+    textarea {
+        width: 100%;
+        height: 260px;
+        padding: 12px;
+        font-family: monospace;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        resize: vertical;
+        background: white;
+        margin-bottom: 20px;
+        transition: 0.2s;
+    }
+
+    #resultado {
+        height: 200px;
+    }
+
+    #generarBtn {
+        padding: 10px 20px;
+        background: #111;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    #generarBtn:hover {
+        background: #333;
+    }
+</style>
+</head>
+
+<body>
+
+
+<h1>Editor para generar README.md</h1>
+
+<div id="toolbar">
+
+    <div class="tool-box">
+        <div class="tool-title">Título grande</div>
+        <button class="tool-btn" onclick="applyPrefix('# ')">H1</button>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">Título mediano</div>
+        <button class="tool-btn" onclick="applyPrefix('## ')">H2</button>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">Negritas</div>
+        <button class="tool-btn" onclick="wrapText('**')">** Bold **</button>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">Cursiva</div>
+        <button class="tool-btn" onclick="wrapText('*')">* Italic *</button>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">Lista</div>
+        <button class="tool-btn" onclick="applyList()">• Lista</button>
+    </div>
+
+    <div class="tool-box">
+        <div class="tool-title">Bloque de código</div>
+        <button class="tool-btn" onclick="wrapBlock('```\n','\n```')">Código</button>
+    </div>
+
+</div>
+
+<textarea id="editor" placeholder="Escribe tu README aquí..."></textarea>
+
+<h2>Resultado Markdown:</h2>
+<textarea id="resultado"></textarea>
+
+<button id="generarBtn" onclick="generar()">Generar README</button>
+
+
+<script>
+/* === FORMATO === */
+function applyPrefix(prefix) {
+    const area = document.getElementById("editor");
+    const start = area.selectionStart;
+    const end = area.selectionEnd;
+    const sel = area.value.substring(start, end);
+
+    area.setRangeText(prefix + sel, start, end, 'end');
+    area.focus();
+}
+
+function wrapText(wrapper) {
+    const area = document.getElementById("editor");
+    const start = area.selectionStart;
+    const end = area.selectionEnd;
+    const sel = area.value.substring(start, end);
+
+    area.setRangeText(wrapper + sel + wrapper, start, end, 'end');
+    area.focus();
+}
+
+function wrapBlock(before, after) {
+    const area = document.getElementById("editor");
+    const start = area.selectionStart;
+    const end = area.selectionEnd;
+    const sel = area.value.substring(start, end);
+
+    area.setRangeText(before + sel + after, start, end, 'end');
+    area.focus();
+}
+
+function applyList() {
+    const area = document.getElementById("editor");
+    const start = area.selectionStart;
+    const end = area.selectionEnd;
+    const sel = area.value.substring(start, end);
+
+    const lines = sel.split("\n").map(l => "- " + l);
+    area.setRangeText(lines.join("\n"), start, end, 'end');
+    area.focus();
+}
+
+function generar() {
+    document.getElementById("resultado").value =
+        document.getElementById("editor").value;
+}
+
+/* === MODO OSCURO === */
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+</script>
+
+</body>
+</html>
