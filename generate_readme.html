@@ -15,7 +15,51 @@
         color: #222;
     }
 
-    
+    /* MODO OSCURO */
+    body.dark {
+        background: #1e1e1e;
+        color: #eaeaea;
+    }
+    body.dark textarea {
+        background: #2a2a2a !important;
+        color: white !important;
+        border-color: #555 !important;
+    }
+    body.dark .tool-box {
+        background: #2b2b2b;
+        border-color: #444;
+    }
+    body.dark .tool-btn {
+        background: #444;
+    }
+    body.dark .tool-btn:hover {
+        background: #666;
+    }
+    body.dark #generarBtn {
+        background: #444;
+    }
+    body.dark #generarBtn:hover {
+        background: #666;
+    }
+
+    /* BOTÓN DE MODO OSCURO */
+    #darkToggle {
+        position: fixed;
+        top: 15px;
+        right: 20px;
+        background: #111;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        z-index: 999;
+    }
+    body.dark #darkToggle {
+        background: #ddd;
+        color: #111;
+    }
 
     h1 {
         font-size: 20px;
@@ -99,6 +143,8 @@
 
 <body>
 
+<!-- BOTÓN MODO OSCURO -->
+<button id="darkToggle" onclick="toggleDark()">🌙 / ☀️</button>
 
 <h1>Editor para generar README.md</h1>
 
@@ -138,11 +184,22 @@
 
 <textarea id="editor" placeholder="Escribe tu README aquí..."></textarea>
 
-<h2>Resultado Markdown:</h2>
-<textarea id="resultado"></textarea>
-
 <button id="generarBtn" onclick="generar()">Generar README</button>
 
+<!-- 🟥 NUEVO BOTÓN PARA LIMPIAR -->
+<button id="limpiarBtn" onclick="limpiar()" style="
+    padding: 10px 20px;
+    background: #800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+">Limpiar todo</button>
+
+<h2>Resultado Markdown:</h2>
+<textarea id="resultado"></textarea>
 
 <script>
 /* === FORMATO === */
@@ -192,9 +249,26 @@ function generar() {
         document.getElementById("editor").value;
 }
 
+/* === LIMPIAR TODO === */
+function limpiar() {
+    const confirmar = confirm("⚠ ¿Seguro que quieres borrar todo el contenido?\nEsta acción no se puede deshacer.");
+    if (!confirmar) return;
+
+    document.getElementById("editor").value = "";
+    document.getElementById("resultado").value = "";
+}
+
+/* === CARGAR MODO OSCURO SI ESTABA ACTIVADO === */
+window.onload = () => {
+    if (localStorage.getItem("darkMode") === "true") {
+        document.body.classList.add("dark");
+    }
+};
+
 /* === MODO OSCURO === */
 function toggleDark() {
     document.body.classList.toggle("dark");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark"));
 }
 </script>
 
